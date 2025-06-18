@@ -116,6 +116,50 @@ gcc -c solutions/flowchart_impl solutions/flowchart_impl.c
 Reflection:
 
 * **Explain how each flowchart node maps to your C code.**
+  **Lösung:**
+  `A[Start: x]`
+  - Bedeutung im Flowchart: das Programm erhält eine Eingabe `x`
+  - Umsetzung im C-Code:
+    --> `void process_value(int x)`
+    --> In `main.c` wird `x` über `scanf` eingelesen und an `process_value` übergeben:
+    --> `scanf("%d", &x);
+        process_value(x);`
+
+    `B[Initialize result = 1]`
+    - Bedeutung im Flowchart: Startwert der Berechnung
+    - Umsetzung im C-Code: `int result = 1;`
+   
+    `C{i = 1 to x?}`
+    - Bedeutung im Flowchart: Beginn und Kontrolle der Schleife von `i = 1` bis `i > x`.
+    - Umsetzung im C-Code: `for (int i = 1; i <= x; i++) {`
+
+    `C -- No --> D[Return result]`
+    - Bedeutung im Flowchart: Falls `i > x`, ist die Schleife beendet → Ergebnis wird ausgegeben.
+    - Umsetzung im C-Code: `printf("Final result: %d\n", result);` (Wird nach der Schleife ausgeführt)
+
+    `E{i % 2 == 0?}`
+    - Bedeutung im Flowchart: Unterscheidung: ist `i` gerade oder ungerade?
+    - Umsetzung im C-Code: `if (i % 2 == 0) {`
+
+    `F[result += i]`
+    - Umsetung im C-Code: `result += i;`
+
+    `G[result *= i]`
+    - Umsetzung im C-Code: `result *= i;`
+
+    `H[result > 1000?]`
+    - Bedeutung im Flowchart: Wurde ein Schwellwert überschritten?
+    - Umsetzung im C-Code: `if (result > 1000) {`
+
+    `I[result -= 100]`
+    - Umsetzung im C-Code: `result -= 100;` (Wird nur ausgeführt, wenn die vorherige Bedingung erfüllt ist)
+
+    `J[Increment i]`
+    - Bedeutung im Flowchart: Erhöhung des Schleifenzählers `i`.
+    - Umsetzung im C-Code: `for (int i = 1; i <= x; i++) {` (Das `i++` ist der Inkrementaloperator zur Erhöhung des
+      Schleifenzählers nach dem Schleifendurchlauf)
+
+    ``
 
 ---
 
@@ -162,6 +206,47 @@ graph TD
   A[Start] --> B[Initialize]
   B --> C{Condition}
   ...
+
+**Mermaid-Flowchart zu Function 1:**
+
+flowchart TD
+    A[Start] --> B[Initialize result = 1, i = 1]
+    B --> C{Is i <= x?}
+    C -- No --> G[Return result]
+    C -- Yes --> D{Is i % 2 == 0?}
+    D -- Yes --> E[Add i to result]
+    D -- No --> F[Multiply result by i]
+    E --> H{Is result > 1000?}
+    F --> H
+    H -- Yes --> I[Subtract 100 from result]
+    H -- No --> J[No change]
+    I --> K[Increment i by 1]
+    J --> K
+    K --> C
+    G --> L[End]
+
+**Mermaid-Flowchart zu Function 2:**
+
+flowchart TD
+    A[Start] --> B[Initialize state = 0, i = 0]
+    B --> C{Is i < len?}
+    C -- No --> F[Go to switch(state)]
+    C -- Yes --> D{arr[i] < 0, == 0, or > 0?}
+    D -- "< 0" --> E1[state = -1]
+    D -- "== 0" --> E2[state = 0]
+    D -- "> 0" --> E3[state = 1]
+    E1 --> G{Is state == 1?}
+    E2 --> G
+    E3 --> G
+    G -- Yes --> H[Break loop]
+    G -- No --> I[Increment i by 1]
+    H --> F
+    I --> C
+    F --> J{Switch(state)}
+    J -- Case 1 --> K[Return true]
+    J -- Default --> L[Return false]
+    K --> M[End]
+    L --> M
 ```
 
 ---
